@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extended Registration Form</title>
+    <style>
+        /* Стили формы */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input.error, select.error {
+            border-color: red;
+            background-color: #ffe6e6;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: -15px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #28a745;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h1>Register</h1>
+    <form id="registrationForm" novalidate>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        <div class="error-message" id="usernameError">Username is required.</div>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <div class="error-message" id="emailError">Email is required and must be valid.</div>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        <div class="error-message" id="passwordError">Password is required.</div>
+
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+        <div class="error-message" id="confirmPasswordError">Passwords must match.</div>
+
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+        <div class="error-message" id="fullNameError">Full Name is required.</div>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required>
+        <div class="error-message" id="dobError">Date of Birth is required.</div>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="" disabled selected>Select your gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+        </select>
+        <div class="error-message" id="genderError">Gender is required.</div>
+
+        <button type="submit">Register</button>
+    </form>
+    <div class="message" id="successMessage" style="display: none;">
+        Registration successful!
+    </div>
+</div>
+
+<script>
+    document.getElementById('registrationForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        let isValid = true;
+
+        // Функция проверки поля
+        const validateField = (fieldId, errorId) => {
+            const field = document.getElementById(fieldId);
+            const error = document.getElementById(errorId);
+            if (field.value.trim() === '') {
+                field.classList.add('error');
+                error.style.display = 'block';
+                isValid = false;
+            } else {
+                field.classList.remove('error');
+                error.style.display = 'none';
+            }
+        };
+
+        // Проверяем каждое поле
+        validateField('username', 'usernameError');
+        validateField('email', 'emailError');
+        validateField('password', 'passwordError');
+        validateField('confirmPassword', 'confirmPasswordError');
+        validateField('fullName', 'fullNameError');
+        validateField('dob', 'dobError');
+
+        // Проверяем совпадение паролей
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.classList.add('error');
+            confirmPasswordError.style.display = 'block';
+            isValid = false;
+        } else {
+            confirmPassword.classList.remove('error');
+            confirmPasswordError.style.display = 'none';
+        }
+
+        // Проверяем поле "Gender"
+        const gender = document.getElementById('gender');
+        const genderError = document.getElementById('genderError');
+        if (gender.value.trim() === '') {
+            gender.classList.add('error');
+            genderError.style.display = 'block';
+            isValid = false;
+        } else {
+            gender.classList.remove('error');
+            genderError.style.display = 'none';
+        }
+
+        // Если форма валидна, показываем сообщение об успехе
+        if (isValid) {
+            document.getElementById('successMessage').style.display = 'block';
+        }
+    });
+
+    // Убираем ошибку при изменении значения
+    const inputs = document.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        input.addEventListener('input', () => {
+            input.classList.remove('error');
+            const error = document.getElementById(input.id + 'Error');
+            if (error) {
+                error.style.display = 'none';
+            }
+        });
+    });
+</script>
+</body>
+</html>
